@@ -1,0 +1,7 @@
+<managed-bean>
+		<managed-bean-name>InitPageBean</managed-bean-name>
+		<managed-bean-class>
+			com.jaub.view.InitPageBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+</managed-bean>
