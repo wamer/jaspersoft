@@ -1,0 +1,24 @@
+public String viewReportPDF() throws SQLException, JRException, IOException {
+		String reportId = "Person";
+		Driver mDriver = new Driver();
+		DriverManager.registerDriver(mDriver);
+		Connection connection = DriverManager.getConnection(
+				Constants.DRIVER_DATABASE_MYSQL,
+				Constants.LOGIN_DATABASE_MYSQL,
+				Constants.PASSWORD_DATABASE_MYSQL);
+		File file = new File(Constants.PATH_OF_REPORTS_JASPER);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(
+				new FileInputStream(new File(file, reportId + ".jasper")),
+				null, connection);
+		byte[] bytes = JasperExportManager.exportReportToPdf(jasperPrint);
+		FacesContext context = FacesContext.getCurrentInstance();
+		HttpServletResponse response = (HttpServletResponse) context
+				.getExternalContext().getResponse();
+response.addHeader("Content-disposition",
+				"attachment;filename=rapport.pdf");
+		response.setContentLength(bytes.length);
+		response.getOutputStream().write(bytes);
+		response.setContentType("application/pdf");
+		context.responseComplete();
+		return null;
+}
