@@ -1,0 +1,61 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+
+import com.mysql.jdbc.Driver;
+public class GeneratePDF {
+public static void main(String[] args) {
+
+        // - Paramètres de connexion à la base de données
+        String url = "jdbc:mysql://localhost/jasper_database";
+        String login = "root";
+        String password = "root";
+        Connection connection = null;
+
+        try {
+            // - Connexion à la base
+            Driver monDriver = new com.mysql.jdbc.Driver();
+            DriverManager.registerDriver(monDriver);
+            connection = DriverManager.getConnection(url, login, password);
+
+            // - Chargement et compilation du rapport
+            JasperDesign jasperDesign = JRXmlLoader.load("D:\\iReport-1.2.1\\classic.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+
+            // - Paramètres à envoyer au rapport
+            Map parameters = new HashMap();
+            parameters.put("Titre", "Titre");
+
+            // - Execution du rapport
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+
+            // - Création du rapport au format PDF
+            JasperExportManager.exportReportToPdfFile(jasperPrint, "D:\\iReport-5.5\\classic.pdf");
+        } catch (JRException e) {
+
+            e.printStackTrace();
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        } finally {
+            try {
+                 connection.close();
+                } catch (SQLException e) {
+
+                        e.printStackTrace();
+                }
+        }
+
+    }
+}
