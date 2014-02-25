@@ -1,0 +1,3 @@
+JasperPrint jasperPrint = JasperFillManager.fillReport(
+new FileInputStream(new File(file, reportId + ".jasper")),
+null, connection);
