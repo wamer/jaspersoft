@@ -1,0 +1,40 @@
+public String viewReportExcel() throws SQLException, JRException, IOException {
+		String reportId = "Person";
+		Driver mDriver = new Driver();
+		DriverManager.registerDriver(mDriver);
+		Connection connection = DriverManager.getConnection(
+				Constants.DRIVER_DATABASE_MYSQL,
+				Constants.LOGIN_DATABASE_MYSQL,
+				Constants.PASSWORD_DATABASE_MYSQL);
+		File file = new File(Constants.PATH_OF_REPORTS_JASPER);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(
+				new FileInputStream(new File(file, reportId + ".jasper")),
+				null, connection);
+		FacesContext context = FacesContext.getCurrentInstance();
+		HttpServletResponse response = (HttpServletResponse) context
+				.getExternalContext().getResponse();
+		if (jasperPrint != null) {
+			ByteArrayOutputStream xlsReport = new ByteArrayOutputStream();
+			JRXlsExporter exporter = new JRXlsExporter();
+			exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT,
+					jasperPrint);
+			exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM,
+					xlsReport);
+			exporter.exportReport();
+			// Send response
+			byte[] bytes = xlsReport.toByteArray();
+			
+			response.addHeader("Content-disposition",
+					"attachment;filename=rapport.xls");
+			response.setContentType("application/vnd.ms-excel");
+			response.setContentLength(bytes.length);
+			response.getOutputStream().write(bytes, 0, bytes.length);
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+		} else {
+			Writer writer = response.getWriter();
+			writer.write("Aucun rapport à afficher");
+			response.setContentType("text/HTML");
+		}
+		return null;
+}
