@@ -9,8 +9,9 @@ Ce projet fait partie du cours SMB214 à l'ISAE-CNAM Liban, Le but de ce projet 
     3 * Exécuter un état depuis JSF
     4* genation de report pdf via java
     5 * Le requêtage SQL dynamique avec Jasper Reports
-    6*Créer dynamiquement Jasper Reports. Connectez vous avec toute base de données et de créer dynamiquement des requêtes       pour produire des rapports Jasper (demo)
-    7* libreairies
+    6*Créer dynamiquement Jasper Reports. Connectez vous avec toute base de données et de créer dynamiquement des            requêtes       pour produire des rapports Jasper (demo)
+    7*demo project jasper,jsf,jpa
+    8* libreairies
 
 
 
